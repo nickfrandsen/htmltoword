@@ -25,7 +25,9 @@
 
   <xsl:template match="body">
     <w:body>
-      <xsl:apply-templates/>
+      <w:p>
+        <xsl:apply-templates/>
+      </w:p>
       <w:sectPr>
         <w:pgSz w:w="11906" w:h="16838"/>
         <w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440" w:header="708" w:footer="708" w:gutter="0"/>
@@ -42,9 +44,6 @@
       </xsl:when>
       <xsl:when test="name(..)='td'">
       </xsl:when>
-      <xsl:otherwise>
-        <w:p><w:pPr><w:pStyle w:val="Afsnit"/></w:pPr><w:r><w:br/></w:r></w:p>
-      </xsl:otherwise>
     </xsl:choose>
 
   </xsl:template>
@@ -71,13 +70,17 @@
 
   <xsl:template match="div">
     <xsl:choose>
-      <xsl:when test="./div">
+      <xsl:when test="name(..)='div' and ./div">
+        <w:r><w:br/></w:r>
         <xsl:apply-templates select="node()"/>
+        <w:r><w:br/></w:r>
+      </xsl:when>
+      <xsl:when test="./div">
+          <xsl:comment>Is this where you come from!</xsl:comment>
+          <xsl:apply-templates select="node()"/>
       </xsl:when>
       <xsl:otherwise>
-        <w:p>
           <xsl:apply-templates select="@class|node()"/>
-        </w:p>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -93,11 +96,9 @@
         <xsl:apply-templates/>
       </xsl:when>
       <xsl:otherwise>
-        <w:p>
-          <w:r>
-            <xsl:apply-templates/>
-          </w:r>
-        </w:p>
+        <w:r>
+          <xsl:apply-templates/>
+        </w:r>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -142,31 +143,29 @@
   </xsl:template>
 
   <xsl:template match="h2">
-    <w:p>
-      <w:pPr>
-        <w:pStyle w:val="Heading2"/>
-      </w:pPr>
+      <xsl:comment>Im in h2</xsl:comment>
       <xsl:apply-templates/>
-    </w:p>
   </xsl:template>
 
   <xsl:template match="h3">
-    <w:p>
-      <w:pPr>
-        <w:pStyle w:val="Heading3"/>
-      </w:pPr>
+
       <xsl:apply-templates/>
-    </w:p>
+
   </xsl:template>
 
   <xsl:template match="text()">
     <xsl:choose>
+      <xsl:when test="name(..)='h3' or name(..)='h2'">
+        <w:r>
+          <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
+        </w:r>
+      </xsl:when>
       <xsl:when test="name(..)='i' or name(..)='b' or (name(..)='span' and name(../..)='b')">
         <xsl:if test="string-length(.) > 0">
           <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
         </xsl:if>
       </xsl:when>
-      <xsl:when test="name(..)='a' or name(..)='span' or name(..)='h3' or name(..)='h2' or name(..)='div'">
+      <xsl:when test="name(..)='a' or name(..)='span' or name(..)='div'">
         <xsl:if test="string-length(.) > 0">
           <w:r>
             <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
@@ -175,11 +174,9 @@
       </xsl:when>
       <xsl:when test="name(..)='td'">
         <xsl:if test="string-length(.) > 0">
-          <w:p>
             <w:r>
               <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
             </w:r>
-          </w:p>
         </xsl:if>
       </xsl:when>
       <xsl:otherwise>
@@ -205,4 +202,3 @@
   </xsl:template>
 
 </xsl:stylesheet>
-
