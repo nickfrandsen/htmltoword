@@ -12,7 +12,7 @@ module Htmltoword
     TEMPLATES_PATH = File.join BASIC_PATH, "templates"
     REL_PATH = "/tmp"
     FILE_EXTENSION = ".docx"
-    XSLT_TEMPLATE = File.join(BASIC_PATH, 'xslt', 'style2.xslt')
+    XSLT_TEMPLATE = File.join(BASIC_PATH, 'xslt', 'html_to_wordml.xslt')
     def initialize(path)
       @replaceable_files = {}
       @template_zip = Zip::ZipFile.open(path)
