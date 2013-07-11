@@ -13,6 +13,7 @@ module Htmltoword
     REL_PATH = "/tmp"
     FILE_EXTENSION = ".docx"
     XSLT_TEMPLATE = File.join(BASIC_PATH, 'xslt', 'html_to_wordml.xslt')
+
     def initialize(path)
       @replaceable_files = {}
       @template_zip = Zip::ZipFile.open(path)
@@ -53,8 +54,16 @@ module Htmltoword
       File.exist?(template_path) ? template_path : default_path
     end
 
+    def self.create content, file_name
+      word_file = new(template_file("overview"))
+      word_file.replace_file content
+      relative_path = File.join REL_PATH, "#{file_name}#{FILE_EXTENSION}"
+      word_file.save_to File.join("public", relative_path)
+      relative_path
+    end
+
     def self.create_with_content template, file_name, content, set=nil
-      word_file = new template_file(template)
+      word_file = new(template_file(template))
       content = replace_values(content, set) if set
       word_file.replace_file content
       relative_path = File.join REL_PATH, "#{file_name}#{FILE_EXTENSION}"

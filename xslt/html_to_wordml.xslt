@@ -46,7 +46,6 @@
         <w:p><w:pPr><w:pStyle w:val="Afsnit"/></w:pPr><w:r><w:br/></w:r></w:p>
       </xsl:otherwise>
     </xsl:choose>
-
   </xsl:template>
 
   <xsl:template match="i">
@@ -58,7 +57,7 @@
     </w:r>
   </xsl:template>
 
-  <xsl:template match="b">
+  <xsl:template match="b|strong">
     <w:r>
       <w:rPr>
         <w:b />
@@ -67,11 +66,8 @@
     </w:r>
   </xsl:template>
 
-  <xsl:template match="strong">
+  <xsl:template match="font">
     <w:r>
-      <w:rPr>
-        <w:b />
-      </w:rPr>
       <xsl:apply-templates />
     </w:r>
   </xsl:template>
@@ -79,11 +75,13 @@
   <xsl:template match="div[@class='crumbNav']"/>
   <xsl:template match="small"/>
 
-
+  <xsl:template match="div[contains(concat(' ', @class, ' '), ' -page-break ')]">
+    <xsl:comment>Making PAGEBREAKS</xsl:comment>
+    <w:r><w:br w:type="page" /></w:r>
+    <xsl:apply-templates select="node()"/>
+  </xsl:template>
 
   <xsl:template match="div">
-
-    <!--<xsl:apply-templates select="node()"/>-->
     <xsl:comment>Parent class '<xsl:value-of select="../@class"/>', my class '<xsl:value-of select="./@class"/>'</xsl:comment>
     <xsl:choose>
       <xsl:when test="name(..)='body'">
@@ -92,15 +90,8 @@
         </w:p>
       </xsl:when>
       <xsl:when test="./div">
-        <!--<w:r><w:br/></w:r>-->
         <xsl:apply-templates select="node()"/>
-        <!--<w:r><w:br/></w:r>-->
       </xsl:when>
-      <!--<xsl:when test="./div">-->
-        <!--<w:p>-->
-          <!--<xsl:apply-templates select="node()"/>-->
-        <!--</w:p>-->
-      <!--</xsl:when>-->
       <xsl:otherwise>
         <w:r><w:br/></w:r>
         <xsl:apply-templates select="node()"/>
@@ -198,50 +189,45 @@
     <xsl:apply-templates/>
   </xsl:template>
 
+  <xsl:template match="h1">
+    <w:r>
+      <w:rPr>
+        <w:rStyle w:val="h1"/>
+      </w:rPr>
+      <w:br/>
+      <xsl:apply-templates />
+      <w:br/>
+    </w:r>
+  </xsl:template>
+
   <xsl:template match="h2">
-    <!--<w:p>-->
-      <!--<w:pPr>-->
-        <!--<w:pStyle w:val="Heading2"/>-->
-      <!--</w:pPr>-->
-      <!--<xsl:apply-templates/>-->
-    <!--</w:p>-->
     <w:r>
       <w:rPr>
         <w:rStyle w:val="h2"/>
-        <!--<w:b />-->
       </w:rPr>
+      <w:br/>
       <xsl:apply-templates />
       <w:br/>
     </w:r>
   </xsl:template>
 
   <xsl:template match="h3">
-    <!--<w:p>-->
-      <!--<w:pPr>-->
-        <!--<w:pStyle w:val="Heading3"/>-->
-      <!--</w:pPr>-->
-      <!--<xsl:apply-templates/>-->
-    <!--</w:p>-->
     <w:r>
       <w:rPr>
-        <w:b />
+        <w:rStyle w:val="h3"/>
       </w:rPr>
+      <w:br/>
       <xsl:apply-templates />
       <w:br/>
     </w:r>
   </xsl:template>
 
   <xsl:template match="h4">
-    <!--<w:p>-->
-    <!--<w:pPr>-->
-    <!--<w:pStyle w:val="Heading3"/>-->
-    <!--</w:pPr>-->
-    <!--<xsl:apply-templates/>-->
-    <!--</w:p>-->
     <w:r>
       <w:rPr>
-        <w:b />
+        <w:rStyle w:val="h4"/>
       </w:rPr>
+      <w:br/>
       <xsl:apply-templates />
       <w:br/>
     </w:r>
@@ -249,16 +235,14 @@
 
   <xsl:template match="text()">
     <xsl:choose>
-      <xsl:when test="name(..)='i' or name(..)='b' or name(..)='strong' or (name(..)='span' and name(../..)='b')">
+      <xsl:when test="name(..)='i' or name(..)='b' or name(..)='strong' or name(..)='font' or (name(..)='span' and name(../..)='b')">
         <xsl:if test="string-length(.) > 0">
           <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
         </xsl:if>
       </xsl:when>
-      <xsl:when test="name(..)='h3' or name(..)='h2' or name(..)='h4'">
+      <xsl:when test="name(..)='h1' or name(..)='h2' or name(..)='h3' or name(..)='h4'">
         <xsl:if test="string-length(.) > 0">
-          <w:r>
             <w:t><xsl:value-of select="."/></w:t>
-          </w:r>
         </xsl:if>
       </xsl:when>
       <xsl:when test="name(..)='a' or name(..)='span' or name(..)='div' or name(..)='li'">
@@ -287,11 +271,13 @@
   <xsl:template match="@class">
     <xsl:choose>
       <xsl:when test="name(..)='span'">
+        <xsl:comment>Is this being used? 1</xsl:comment>
         <w:rPr>
           <w:rStyle w:val="{.}"/>
         </w:rPr>
       </xsl:when>
       <xsl:when test="name(..)='div'">
+        <xsl:comment>Is this being used? 2</xsl:comment>
         <w:pPr>
           <w:pStyle w:val="{.}"/>
         </w:pPr>

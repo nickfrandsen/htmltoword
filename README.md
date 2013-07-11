@@ -19,6 +19,7 @@ Or install it yourself as:
 ## Usage
 
 TODO: Write usage instructions here
+- To add page breaks use div.page-break
 
 ## Contributing
 
