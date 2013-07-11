@@ -43,7 +43,7 @@
       <xsl:when test="name(..)='td'">
       </xsl:when>
       <xsl:otherwise>
-        <w:p><w:pPr><w:pStyle w:val="Afsnit"/></w:pPr><w:r><w:br/></w:r></w:p>
+        <w:pPr><w:pStyle w:val="Afsnit"/></w:pPr><w:r><w:br/></w:r>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -141,11 +141,9 @@
         <xsl:apply-templates/>
       </xsl:when>
       <xsl:otherwise>
-        <w:p>
-          <w:r>
-            <xsl:apply-templates/>
-          </w:r>
-        </w:p>
+        <w:r>
+          <xsl:apply-templates/>
+        </w:r>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -254,11 +252,9 @@
       </xsl:when>
       <xsl:when test="name(..)='td'">
         <xsl:if test="string-length(.) > 0">
-          <w:p>
-            <w:r>
-              <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
-            </w:r>
-          </w:p>
+          <w:r>
+            <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
+          </w:r>
         </xsl:if>
       </xsl:when>
       <xsl:otherwise>
