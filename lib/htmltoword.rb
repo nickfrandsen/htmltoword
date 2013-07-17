@@ -1,5 +1,9 @@
 # encoding: UTF-8
 require "htmltoword/version"
+require "action_controller"
+require "action_view"
+require "nokogiri"
+require "zip/zip"
 
 module Htmltoword
   def self.root
