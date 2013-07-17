@@ -93,7 +93,7 @@
       </xsl:when>
       <xsl:otherwise>
         <w:r><w:br/></w:r>
-        <xsl:apply-templates select="node()"/>
+          <xsl:apply-templates select="node()"/>
         <w:r><w:br/></w:r>
       </xsl:otherwise>
     </xsl:choose>
@@ -133,16 +133,7 @@
   </xsl:template>
 
   <xsl:template match="span">
-    <xsl:choose>
-      <xsl:when test="name(..)='body'">
-        <w:r>
-          <xsl:apply-templates/>
-        </w:r>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:apply-templates/>
-      </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates/>
   </xsl:template>
 
   <xsl:template match="table">
@@ -230,12 +221,12 @@
 
   <xsl:template match="text()">
     <xsl:choose>
-      <xsl:when test="name(..)='i' or name(..)='b' or name(..)='strong' or name(..)='font' or name(..)='span' or name(..)='h1' or name(..)='h2' or name(..)='h3' or name(..)='h4'">
+      <xsl:when test="name(..)='i' or name(..)='b' or name(..)='strong' or name(..)='font' or name(..)='h1' or name(..)='h2' or name(..)='h3' or name(..)='h4'">
         <xsl:if test="string-length(.) > 0">
           <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
         </xsl:if>
       </xsl:when>
-      <xsl:when test="name(..)='a' or name(..)='div' or name(..)='li' or name(..)='td' or name(..)='p'">
+      <xsl:when test="name(..)='a' or name(..)='div' or name(..)='span' or name(..)='li' or name(..)='td' or name(..)='p'">
         <xsl:if test="string-length(.) > 0">
           <w:r>
             <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
