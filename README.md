@@ -1,6 +1,4 @@
-[![Build Status](https://travis-ci.org/nickfrandsen/htmltoword.png)](https://travis-ci.org/nickfrandsen/htmltoword)
-
-# Htmltoword
+# Htmltoword [![Build Status](https://travis-ci.org/nickfrandsen/htmltoword.png)](https://travis-ci.org/nickfrandsen/htmltoword)
 
 TODO: Write a gem description
 
