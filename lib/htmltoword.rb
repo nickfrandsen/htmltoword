@@ -24,6 +24,7 @@ module Htmltoword
     end
 
     def save_to(path)
+      FileUtils.mkdir_p File.dirname(path)
       Zip::ZipFile.open(path, Zip::ZipFile::CREATE) do |out|
         @template_zip.each do |entry|
           out.get_output_stream(entry.name) do |o|
