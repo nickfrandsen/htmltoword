@@ -25,7 +25,9 @@
 
   <xsl:template match="body">
     <w:body>
-      <xsl:apply-templates/>
+      <w:p>
+        <xsl:apply-templates/>
+      </w:p>
       <w:sectPr>
         <w:pgSz w:w="11906" w:h="16838"/>
         <w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440" w:header="708" w:footer="708" w:gutter="0"/>
@@ -82,12 +84,9 @@
   </xsl:template>
 
   <xsl:template match="div">
-    <xsl:comment>Parent class '<xsl:value-of select="../@class"/>', my class '<xsl:value-of select="./@class"/>'</xsl:comment>
     <xsl:choose>
       <xsl:when test="name(..)='body'">
-        <w:p>
-          <xsl:apply-templates select="node()"/>
-        </w:p>
+        <xsl:apply-templates select="node()"/>
       </xsl:when>
       <xsl:when test="./div">
         <xsl:apply-templates select="node()"/>
@@ -100,6 +99,9 @@
     </xsl:choose>
   </xsl:template>
 
+  <xsl:template match="p">
+    <xsl:apply-templates/>
+  </xsl:template>
 
   <xsl:template match="ol|ul">
     <w:r><w:br/></w:r>
@@ -132,18 +134,13 @@
 
   <xsl:template match="span">
     <xsl:choose>
-      <xsl:when test="name(..)='div' or name(..)='h2' or name(..)='h3' or name(..)='li'">
+      <xsl:when test="name(..)='body'">
         <w:r>
           <xsl:apply-templates/>
         </w:r>
-      </xsl:when>
-      <xsl:when test="name(..)='b'">
-        <xsl:apply-templates/>
       </xsl:when>
       <xsl:otherwise>
-        <w:r>
-          <xsl:apply-templates/>
-        </w:r>
+        <xsl:apply-templates/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -233,24 +230,12 @@
 
   <xsl:template match="text()">
     <xsl:choose>
-      <xsl:when test="name(..)='i' or name(..)='b' or name(..)='strong' or name(..)='font' or (name(..)='span' and name(../..)='b')">
+      <xsl:when test="name(..)='i' or name(..)='b' or name(..)='strong' or name(..)='font' or name(..)='span' or name(..)='h1' or name(..)='h2' or name(..)='h3' or name(..)='h4'">
         <xsl:if test="string-length(.) > 0">
           <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
         </xsl:if>
       </xsl:when>
-      <xsl:when test="name(..)='h1' or name(..)='h2' or name(..)='h3' or name(..)='h4'">
-        <xsl:if test="string-length(.) > 0">
-            <w:t><xsl:value-of select="."/></w:t>
-        </xsl:if>
-      </xsl:when>
-      <xsl:when test="name(..)='a' or name(..)='span' or name(..)='div' or name(..)='li'">
-        <xsl:if test="string-length(.) > 0">
-          <w:r>
-            <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
-          </w:r>
-        </xsl:if>
-      </xsl:when>
-      <xsl:when test="name(..)='td'">
+      <xsl:when test="name(..)='a' or name(..)='div' or name(..)='li' or name(..)='td' or name(..)='p'">
         <xsl:if test="string-length(.) > 0">
           <w:r>
             <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
