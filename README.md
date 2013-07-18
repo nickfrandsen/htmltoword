@@ -1,4 +1,4 @@
-# Htmltoword [![Build Status](https://travis-ci.org/nickfrandsen/htmltoword.png)](https://travis-ci.org/nickfrandsen/htmltoword)
+# Ruby Html-to-word Gem [![Code Climate](https://codeclimate.com/github/nickfrandsen/htmltoword.png)](https://codeclimate.com/github/nickfrandsen/htmltoword) [![Build Status](https://travis-ci.org/nickfrandsen/htmltoword.png)](https://travis-ci.org/nickfrandsen/htmltoword)
 
 TODO: Write a gem description
 
