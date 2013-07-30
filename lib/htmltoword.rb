@@ -18,8 +18,6 @@ module Htmltoword
 
     DOC_XML_FILE = "word/document.xml"
     BASIC_PATH = ::Htmltoword.root
-    SAVING_REL_PATH = "public/tmp"
-    BASIC_REL_URL = "/tmp"
     FILE_EXTENSION = ".docx"
     XSLT_TEMPLATE = File.join(BASIC_PATH, 'xslt', 'html_to_wordml.xslt')
 
@@ -30,7 +28,6 @@ module Htmltoword
         word_file = new(template_file, file_name)
         word_file.replace_file content
         word_file.save
-        word_file.rel_url
       end
 
       def create_with_content template, file_name, content, set=nil
@@ -38,12 +35,11 @@ module Htmltoword
         content = replace_values(content, set) if set
         word_file.replace_file content
         word_file.save
-        word_file.rel_url
       end
     end
 
     def initialize(template_path, file_name)
-      @file_name = "#{file_name}#{FILE_EXTENSION}"
+      @file_name = file_name
       @replaceable_files = {}
       @template_zip = Zip::ZipFile.open(template_path)
     end
@@ -56,24 +52,25 @@ module Htmltoword
     # It creates missing folders if needed, creates a new zip/word file on the
     # specified location, copies all the files from the template word document
     # and replace the content of the ones to be replaced.
+    # It will create a tempfile and return it. The rails app using the gem
+    # should decide what to do with it.
     #
-    # path: Could be an absolute or relative path, by default it uses a
-    #       relative path defined on <code>rel_path</code>
     #
-    def save(path=rel_path)
-      FileUtils.mkdir_p File.dirname(path)
-      Zip::ZipFile.open(path, Zip::ZipFile::CREATE) do |out|
+    def save
+      output_file = Tempfile.new([file_name, FILE_EXTENSION], type: 'application/zip')
+      Zip::ZipOutputStream.open(output_file.path) do |out|
         @template_zip.each do |entry|
-          out.get_output_stream(entry.name) do |o|
-            if @replaceable_files[entry.name]
-              o.write(@replaceable_files[entry.name])
-            else
-              o.write(@template_zip.read(entry.name))
-            end
+          out.put_next_entry entry.name
+          if @replaceable_files[entry.name]
+            out.write(@replaceable_files[entry.name])
+          else
+            out.write(@template_zip.read(entry.name))
           end
         end
       end
       @template_zip.close
+      output_file.close
+      return output_file
     end
 
     def replace_file html, file_name=DOC_XML_FILE
@@ -81,14 +78,6 @@ module Htmltoword
       xslt = Nokogiri::XSLT( File.read(XSLT_TEMPLATE) )
       source = xslt.transform( source ) unless (source/"/html").blank?
       @replaceable_files[file_name] = source.to_s
-    end
-
-    def rel_path
-      File.join(SAVING_REL_PATH, file_name)
-    end
-
-    def rel_url
-      File.join(BASIC_REL_URL, file_name)
     end
 
   end
