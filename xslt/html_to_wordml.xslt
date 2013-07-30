@@ -175,43 +175,10 @@
     <xsl:apply-templates/>
   </xsl:template>
 
-  <xsl:template match="h1">
+  <xsl:template match="h1|h2|h3|h4">
     <w:r>
       <w:rPr>
-        <w:rStyle w:val="h1"/>
-      </w:rPr>
-      <w:br/>
-      <xsl:apply-templates />
-      <w:br/>
-    </w:r>
-  </xsl:template>
-
-  <xsl:template match="h2">
-    <w:r>
-      <w:rPr>
-        <w:rStyle w:val="h2"/>
-      </w:rPr>
-      <w:br/>
-      <xsl:apply-templates />
-      <w:br/>
-    </w:r>
-  </xsl:template>
-
-  <xsl:template match="h3">
-    <w:r>
-      <w:rPr>
-        <w:rStyle w:val="h3"/>
-      </w:rPr>
-      <w:br/>
-      <xsl:apply-templates />
-      <w:br/>
-    </w:r>
-  </xsl:template>
-
-  <xsl:template match="h4">
-    <w:r>
-      <w:rPr>
-        <w:rStyle w:val="h4"/>
+        <w:rStyle w:val="{name(.)}"/>
       </w:rPr>
       <w:br/>
       <xsl:apply-templates />
