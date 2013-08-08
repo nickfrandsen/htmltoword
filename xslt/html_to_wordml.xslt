@@ -188,7 +188,7 @@
 
   <xsl:template match="text()">
     <xsl:choose>
-      <xsl:when test="name(..)='i' or name(..)='b' or name(..)='strong' or name(..)='font' or name(..)='h1' or name(..)='h2' or name(..)='h3' or name(..)='h4'">
+      <xsl:when test="name(..)='i' or name(..)='b' or name(..)='strong' or name(..)='font' or ancestor::h3 or ancestor::h2 or ancestor::h1 or ancestor::h4">
         <xsl:if test="string-length(.) > 0">
           <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
         </xsl:if>
