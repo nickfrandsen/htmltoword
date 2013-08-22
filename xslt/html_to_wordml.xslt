@@ -50,7 +50,7 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template match="i">
+  <xsl:template match="i|em">
     <w:r>
       <w:rPr>
         <w:i />
@@ -188,7 +188,7 @@
 
   <xsl:template match="text()">
     <xsl:choose>
-      <xsl:when test="name(..)='i' or name(..)='b' or name(..)='strong' or name(..)='font' or ancestor::h3 or ancestor::h2 or ancestor::h1 or ancestor::h4">
+      <xsl:when test="name(..)='i' or name(..)='em' or name(..)='b' or name(..)='strong' or name(..)='font' or ancestor::h3 or ancestor::h2 or ancestor::h1 or ancestor::h4">
         <xsl:if test="string-length(.) > 0">
           <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
         </xsl:if>
