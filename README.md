@@ -14,7 +14,7 @@ Or install it yourself as:
 
     $ gem install htmltoword
 
-## Usage 
+## Usage
 
 ### Standalone
 
@@ -47,7 +47,7 @@ All standard html elements are supported and will create the closest equivalent 
 
 ### Highlighting text
 
-You can add highlighting to text by wrapping it in a span with class h and adding a data style with a color that wordml supports (TODO: Provide list) ie:
+You can add highlighting to text by wrapping it in a span with class h and adding a data style with a color that wordml supports (http://www.schemacentral.com/sc/ooxml/t-w_ST_HighlightColor.html) ie:
 
 ```html
 <span class="h" data-style="green">This text will have a green highlight</span>
@@ -70,7 +70,7 @@ The basic functioning of this gem can be summarised as:
 1. Transform inputed html to wordml.
 2. Unzip empty word docx file bundled with gem and replace its document.xml content with the new transformed result of step 1.
 3. Zip up contents again into a resulting .docx file.
- 
+
 For more info about WordML: http://rep.oio.dk/microsoft.com/officeschemas/wordprocessingml_article.htm
 
 Contributions would be very much appreciated.

@@ -121,6 +121,7 @@
       <xsl:choose>
         <xsl:when test="./@data-style='pink'">magenta</xsl:when>
         <xsl:when test="./@data-style='blue'">cyan</xsl:when>
+        <xsl:when test="./@data-style='orange'">darkYellow</xsl:when>
         <xsl:otherwise><xsl:value-of select="./@data-style"/></xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
