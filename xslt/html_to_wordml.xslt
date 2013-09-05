@@ -74,9 +74,6 @@
     </w:r>
   </xsl:template>
 
-  <xsl:template match="div[@class='crumbNav']"/>
-  <xsl:template match="div[contains(concat(' ', @class, ' '), ' nondisplayed ')]"/>
-  <xsl:template match="span[contains(concat(' ', @class, ' '), ' nondisplayed ')]"/>
   <xsl:template match="small"/>
 
   <xsl:template match="div[contains(concat(' ', @class, ' '), ' -page-break ')]">
@@ -227,5 +224,7 @@
     </xsl:choose>
   </xsl:template>
 
+  <xsl:template match="div[@class='crumbNav']"/>
+  <xsl:template match="div[contains(concat(' ', @class, ' '), ' nondisplayed ')]"/>
+  <xsl:template match="span[contains(concat(' ', @class, ' '), ' nondisplayed ')]"/>
 </xsl:stylesheet>
-
