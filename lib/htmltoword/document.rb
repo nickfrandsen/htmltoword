@@ -26,7 +26,7 @@ module Htmltoword
     def initialize(template_path, file_name)
       @file_name = file_name
       @replaceable_files = {}
-      @template_zip = Zip::File.open(template_path)
+      @template_path = template_path
     end
 
     def file_name
@@ -43,17 +43,18 @@ module Htmltoword
     #
     def save
       output_file = Tempfile.new([file_name, FILE_EXTENSION], type: 'application/zip')
-      Zip::OutputStream.open(output_file.path) do |out|
-        @template_zip.each do |entry|
-          out.put_next_entry entry.name
-          if @replaceable_files[entry.name]
-            out.write(@replaceable_files[entry.name])
-          else
-            out.write(@template_zip.read(entry.name))
+      Zip::File.open(@template_path) do |template_zip|
+        Zip::OutputStream.open(output_file.path) do |out|
+          template_zip.each do |entry|
+            out.put_next_entry entry.name
+            if @replaceable_files[entry.name]
+              out.write(@replaceable_files[entry.name])
+            else
+              out.write(template_zip.read(entry.name))
+            end
           end
         end
       end
-      @template_zip.close
       output_file.close
       return output_file
     end
