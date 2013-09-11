@@ -42,21 +42,21 @@ module Htmltoword
     #
     #
     def save
-      output_file = Tempfile.new([file_name, FILE_EXTENSION], type: 'application/zip')
-      Zip::File.open(@template_path) do |template_zip|
-        Zip::OutputStream.open(output_file.path) do |out|
-          template_zip.each do |entry|
-            out.put_next_entry entry.name
-            if @replaceable_files[entry.name]
-              out.write(@replaceable_files[entry.name])
-            else
-              out.write(template_zip.read(entry.name))
+      Tempfile.open([file_name, FILE_EXTENSION], type: 'application/zip') do |output_file|
+        Zip::File.open(@template_path) do |template_zip|
+          Zip::OutputStream.open(output_file.path) do |out|
+            template_zip.each do |entry|
+              out.put_next_entry entry.name
+              if @replaceable_files[entry.name]
+                out.write(@replaceable_files[entry.name])
+              else
+                out.write(template_zip.read(entry.name))
+              end
             end
           end
         end
+        output_file
       end
-      output_file.close
-      return output_file
     end
 
     def replace_file html, file_name=DOC_XML_FILE
