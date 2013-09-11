@@ -1,7 +1,4 @@
 # encoding: UTF-8
-require "htmltoword/version"
-require "htmltoword/htmltoword_helper"
-require "htmltoword/document"
 require "action_controller"
 require "action_view"
 require "nokogiri"
@@ -16,3 +13,7 @@ module Htmltoword
     File.join root, "templates"
   end
 end
+
+require "htmltoword/version"
+require "htmltoword/htmltoword_helper"
+require "htmltoword/document"
