@@ -37,7 +37,15 @@
     </w:body>
   </xsl:template>
 
-  <xsl:template match="div[not(ancestor::p) and not(descendant::div) and not(descendant::p) and not(descendant::h1) and not(descendant::h2) and not(descendant::h3) and not(descendant::h4) and not(descendant::table)]">
+  <xsl:template match="body/*[not(*)]">
+    <w:p>
+      <w:r>
+        <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
+      </w:r>
+    </w:p>
+  </xsl:template>
+
+  <xsl:template match="div[not(ancestor::p) and not(descendant::div) and not(descendant::p) and not(descendant::h1) and not(descendant::h2) and not(descendant::h3) and not(descendant::h4) and not(descendant::table) and not(descendant::li)]">
     <xsl:comment>Divs should create a p if nothing above them has and nothing below them will</xsl:comment>
     <w:p>
       <xsl:apply-templates />
@@ -61,9 +69,7 @@
 
   <xsl:template match="p">
     <w:p>
-      <w:r>
-        <xsl:apply-templates />
-      </w:r>
+      <xsl:apply-templates />
     </w:p>
   </xsl:template>
 
@@ -75,9 +81,9 @@
     </w:p>
   </xsl:template>
 
-  <xsl:template match="span[preceding-sibling::h1 or preceding-sibling::h2 or preceding-sibling::h3 or preceding-sibling::h4 or preceding-sibling::h5 or preceding-sibling::h6 or preceding-sibling::table]
-    |a[preceding-sibling::h1 or preceding-sibling::h2 or preceding-sibling::h3 or preceding-sibling::h4 or preceding-sibling::h5 or preceding-sibling::h6 or preceding-sibling::table]
-    |small[preceding-sibling::h1 or preceding-sibling::h2 or preceding-sibling::h3 or preceding-sibling::h4 or preceding-sibling::h5 or preceding-sibling::h6 or preceding-sibling::table]">
+  <xsl:template match="span[preceding-sibling::h1 or preceding-sibling::h2 or preceding-sibling::h3 or preceding-sibling::h4 or preceding-sibling::h5 or preceding-sibling::h6 or preceding-sibling::table or preceding-sibling::p or preceding-sibling::ol or preceding-sibling::ul or following-sibling::h1 or following-sibling::h2 or following-sibling::h3 or following-sibling::h4 or following-sibling::h5 or following-sibling::h6 or following-sibling::table or following-sibling::p or following-sibling::ol or following-sibling::ul]
+    |a[preceding-sibling::h1 or preceding-sibling::h2 or preceding-sibling::h3 or preceding-sibling::h4 or preceding-sibling::h5 or preceding-sibling::h6 or preceding-sibling::table or preceding-sibling::p or preceding-sibling::ol or preceding-sibling::ul or following-sibling::h1 or following-sibling::h2 or following-sibling::h3 or following-sibling::h4 or following-sibling::h5 or following-sibling::h6 or following-sibling::table or following-sibling::p or following-sibling::ol or following-sibling::ul]
+    |small[preceding-sibling::h1 or preceding-sibling::h2 or preceding-sibling::h3 or preceding-sibling::h4 or preceding-sibling::h5 or preceding-sibling::h6 or preceding-sibling::table or preceding-sibling::p or preceding-sibling::ol or preceding-sibling::ul or following-sibling::h1 or following-sibling::h2 or following-sibling::h3 or following-sibling::h4 or following-sibling::h5 or following-sibling::h6 or following-sibling::table or following-sibling::p or following-sibling::ol or following-sibling::ul]|strong[preceding-sibling::h1 or preceding-sibling::h2 or preceding-sibling::h3 or preceding-sibling::h4 or preceding-sibling::h5 or preceding-sibling::h6 or preceding-sibling::table or preceding-sibling::p or preceding-sibling::ol or preceding-sibling::ul or following-sibling::h1 or following-sibling::h2 or following-sibling::h3 or following-sibling::h4 or following-sibling::h5 or following-sibling::h6 or following-sibling::table or following-sibling::p or following-sibling::ol or following-sibling::ul]">
     <xsl:comment>
         In the following situation:
 
@@ -94,6 +100,24 @@
     </w:p>
   </xsl:template>
 
+  <xsl:template match="text()[preceding-sibling::h1 or preceding-sibling::h2 or preceding-sibling::h3 or preceding-sibling::h4 or preceding-sibling::h5 or preceding-sibling::h6 or preceding-sibling::table or preceding-sibling::p or preceding-sibling::ol or preceding-sibling::ul or following-sibling::h1 or following-sibling::h2 or following-sibling::h3 or following-sibling::h4 or following-sibling::h5 or following-sibling::h6 or following-sibling::table or following-sibling::p or following-sibling::ol or following-sibling::ul]">
+    <xsl:comment>
+        In the following situation:
+
+        div
+          h2
+          textnode
+          p
+
+        The div template will not create a w:p because the div contains a h2. Therefore we need to wrap the textnode in a p here.
+      </xsl:comment>
+    <w:p>
+      <w:r>
+        <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
+      </w:r>
+    </w:p>
+  </xsl:template>
+
   <xsl:template match="span[contains(concat(' ', @class, ' '), ' h ')]">
     <xsl:variable name="color">
       <xsl:choose>
@@ -107,7 +131,7 @@
       <w:rPr>
         <w:highlight w:val="{$color}"/>
       </w:rPr>
-      <xsl:apply-templates/>
+      <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
     </w:r>
   </xsl:template>
 
@@ -182,25 +206,8 @@
             <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
           </w:r>
         </xsl:when>
-        <xsl:when test="parent::div and (preceding-sibling::h1 or preceding-sibling::h2 or preceding-sibling::h3 or preceding-sibling::h4 or preceding-sibling::h5 or preceding-sibling::h6 or preceding-sibling::table)">
-          <xsl:comment>
-            In the following situation:
-
-            div
-              h2
-              textnode
-
-            The div template will not create a w:p because the div contains a h2. Therefore we need to wrap the textnode in a p here.
-          </xsl:comment>
-          <w:p>
-            <w:r>
-              <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
-            </w:r>
-          </w:p>
-        </xsl:when>
         <xsl:otherwise>
           <w:r>
-            <xsl:comment>text() fallback</xsl:comment>
             <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
           </w:r>
         </xsl:otherwise>
