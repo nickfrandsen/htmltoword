@@ -17,17 +17,17 @@
 
   <xsl:output method="xml" encoding="utf-8" omit-xml-declaration="no" indent="yes" />
 
-  <xsl:template match="/ | html">
+  <xsl:template match="/">
     <w:document xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas" xmlns:mo="http://schemas.microsoft.com/office/mac/office/2008/main" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mv="urn:schemas-microsoft-com:mac:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" xmlns:wpi="http://schemas.microsoft.com/office/word/2010/wordprocessingInk" xmlns:wne="http://schemas.microsoft.com/office/word/2006/wordml" xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape" mc:Ignorable="w14 wp14">
-      <xsl:apply-templates select="//body"/>
+      <xsl:apply-templates />
     </w:document>
   </xsl:template>
 
+  <xsl:template match="head" />
+
   <xsl:template match="body">
     <w:body>
-      <w:p>
-        <xsl:apply-templates/>
-      </w:p>
+      <xsl:apply-templates/>
       <w:sectPr>
         <w:pgSz w:w="11906" w:h="16838"/>
         <w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440" w:header="708" w:footer="708" w:gutter="0"/>
@@ -37,82 +37,61 @@
     </w:body>
   </xsl:template>
 
-  <xsl:template match="br">
-    <xsl:choose>
-      <xsl:when test="name(..)='div' or name(..)='small'">
-        <w:r><w:br/></w:r>
-      </xsl:when>
-      <xsl:when test="name(..)='td'">
-      </xsl:when>
-      <xsl:otherwise>
-        <w:pPr><w:pStyle w:val="Afsnit"/></w:pPr><w:r><w:br/></w:r>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-
-  <xsl:template match="i|em">
-    <w:r>
-      <w:rPr>
-        <w:i />
-      </w:rPr>
+  <xsl:template match="div[not(ancestor::p) and not(descendant::div) and not(descendant::p) and not(descendant::h1) and not(descendant::h2) and not(descendant::h3) and not(descendant::h4) and not(descendant::table)]">
+    <xsl:comment>Divs should create a p if nothing above them has and nothing below them will</xsl:comment>
+    <w:p>
       <xsl:apply-templates />
-    </w:r>
-  </xsl:template>
-
-  <xsl:template match="b|strong">
-    <w:r>
-      <w:rPr>
-        <w:b />
-      </w:rPr>
-      <xsl:apply-templates />
-    </w:r>
-  </xsl:template>
-
-  <xsl:template match="font">
-    <w:r>
-      <xsl:apply-templates />
-    </w:r>
-  </xsl:template>
-
-  <xsl:template match="small"/>
-
-  <xsl:template match="div[contains(concat(' ', @class, ' '), ' -page-break ')]">
-    <xsl:comment>Making PAGEBREAKS</xsl:comment>
-    <w:r><w:br w:type="page" /></w:r>
-    <xsl:apply-templates select="node()"/>
+    </w:p>
   </xsl:template>
 
   <xsl:template match="div">
-    <xsl:choose>
-      <xsl:when test="name(..)='body'">
-        <xsl:apply-templates select="node()"/>
-      </xsl:when>
-      <xsl:when test="./div">
-        <xsl:apply-templates select="node()"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <w:r><w:br/></w:r>
-          <xsl:apply-templates select="node()"/>
-        <w:r><w:br/></w:r>
-      </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates />
+  </xsl:template>
+
+  <xsl:template match="h1|h2|h3|h4|h5|h6">
+    <w:p>
+      <w:r>
+        <w:rPr>
+          <w:rStyle w:val="{name(.)}"/>
+        </w:rPr>
+        <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
+      </w:r>
+    </w:p>
   </xsl:template>
 
   <xsl:template match="p">
-    <xsl:apply-templates/>
-  </xsl:template>
-
-  <xsl:template match="ol|ul">
-    <w:r><w:br/></w:r>
-    <xsl:apply-templates/>
-    <w:r><w:br/></w:r>
+    <w:p>
+      <w:r>
+        <xsl:apply-templates />
+      </w:r>
+    </w:p>
   </xsl:template>
 
   <xsl:template match="li">
-    <w:r><w:t xml:space="preserve">   </w:t></w:r>
-    <xsl:apply-templates/>
+    <w:p>
+      <w:r>
+        <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
+      </w:r>
+    </w:p>
+  </xsl:template>
 
-    <w:r><w:br/></w:r>
+  <xsl:template match="span[preceding-sibling::h1 or preceding-sibling::h2 or preceding-sibling::h3 or preceding-sibling::h4 or preceding-sibling::h5 or preceding-sibling::h6 or preceding-sibling::table]
+    |a[preceding-sibling::h1 or preceding-sibling::h2 or preceding-sibling::h3 or preceding-sibling::h4 or preceding-sibling::h5 or preceding-sibling::h6 or preceding-sibling::table]
+    |small[preceding-sibling::h1 or preceding-sibling::h2 or preceding-sibling::h3 or preceding-sibling::h4 or preceding-sibling::h5 or preceding-sibling::h6 or preceding-sibling::table]">
+    <xsl:comment>
+        In the following situation:
+
+        div
+          h2
+          span
+            textnode
+          p
+
+        The div template will not create a w:p because the div contains a h2. Therefore we need to wrap the span|a|small in a p here.
+      </xsl:comment>
+    <w:p>
+      <xsl:apply-templates />
+    </w:p>
   </xsl:template>
 
   <xsl:template match="span[contains(concat(' ', @class, ' '), ' h ')]">
@@ -132,8 +111,13 @@
     </w:r>
   </xsl:template>
 
-  <xsl:template match="span">
-    <xsl:apply-templates/>
+  <xsl:template match="div[contains(concat(' ', @class, ' '), ' -page-break ')]">
+    <w:p>
+      <w:r>
+        <w:br w:type="page" />
+      </w:r>
+    </w:p>
+    <xsl:apply-templates />
   </xsl:template>
 
   <xsl:template match="table">
@@ -155,76 +139,78 @@
         <w:gridCol w:w="2310"/>
         <w:gridCol w:w="2310"/>
       </w:tblGrid>
-      <xsl:apply-templates select="tr"/>
+      <xsl:apply-templates />
     </w:tbl>
+  </xsl:template>
+
+  <xsl:template match="tbody">
+    <xsl:apply-templates />
   </xsl:template>
 
   <xsl:template match="tr">
     <w:tr>
-      <xsl:apply-templates select="td"/>
+      <xsl:apply-templates />
     </w:tr>
   </xsl:template>
 
   <xsl:template match="td">
     <w:tc>
-      <xsl:apply-templates/>
+      <w:p>
+        <w:r>
+          <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
+        </w:r>
+      </w:p>
     </w:tc>
   </xsl:template>
 
-  <xsl:template match="a">
+  <xsl:template match="text()">
+    <xsl:if test="string-length(.) > 0">
+      <xsl:choose>
+        <xsl:when test="parent::i or parent::em">
+          <w:r>
+            <w:rPr>
+              <w:i />
+            </w:rPr>
+            <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
+          </w:r>
+        </xsl:when>
+        <xsl:when test="parent::b or parent::strong">
+          <w:r>
+            <w:rPr>
+              <w:b />
+            </w:rPr>
+            <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
+          </w:r>
+        </xsl:when>
+        <xsl:when test="parent::div and (preceding-sibling::h1 or preceding-sibling::h2 or preceding-sibling::h3 or preceding-sibling::h4 or preceding-sibling::h5 or preceding-sibling::h6 or preceding-sibling::table)">
+          <xsl:comment>
+            In the following situation:
+
+            div
+              h2
+              textnode
+
+            The div template will not create a w:p because the div contains a h2. Therefore we need to wrap the textnode in a p here.
+          </xsl:comment>
+          <w:p>
+            <w:r>
+              <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
+            </w:r>
+          </w:p>
+        </xsl:when>
+        <xsl:otherwise>
+          <w:r>
+            <xsl:comment>text() fallback</xsl:comment>
+            <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
+          </w:r>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:if>
+  </xsl:template>
+
+
+  <xsl:template match="*">
     <xsl:apply-templates/>
   </xsl:template>
 
-  <xsl:template match="h1|h2|h3|h4">
-    <w:r>
-      <w:rPr>
-        <w:rStyle w:val="{name(.)}"/>
-      </w:rPr>
-      <w:br/>
-      <xsl:apply-templates />
-      <w:br/>
-    </w:r>
-  </xsl:template>
-
-  <xsl:template match="text()">
-    <xsl:choose>
-      <xsl:when test="name(..)='i' or name(..)='em' or name(..)='b' or name(..)='strong' or name(..)='font' or ancestor::h3 or ancestor::h2 or ancestor::h1 or ancestor::h4">
-        <xsl:if test="string-length(.) > 0">
-          <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
-        </xsl:if>
-      </xsl:when>
-      <xsl:when test="name(..)='a' or name(..)='div' or name(..)='span' or name(..)='li' or name(..)='td' or name(..)='p'">
-        <xsl:if test="string-length(.) > 0">
-          <w:r>
-            <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
-          </w:r>
-        </xsl:if>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:comment>What to do with text '<xsl:value-of select="."/>' in <xsl:value-of select="name(..)"/> element?</xsl:comment>
-      </xsl:otherwise>
-    </xsl:choose>
-
-  </xsl:template>
-  <!--Need to tokenize the value of the class and remove the useless ones.-->
-  <xsl:template match="@class">
-    <xsl:choose>
-      <xsl:when test="name(..)='span'">
-        <xsl:comment>Is this being used? 1</xsl:comment>
-        <w:rPr>
-          <w:rStyle w:val="{.}"/>
-        </w:rPr>
-      </xsl:when>
-      <xsl:when test="name(..)='div'">
-        <xsl:comment>Is this being used? 2</xsl:comment>
-        <w:pPr>
-          <w:pStyle w:val="{.}"/>
-        </w:pPr>
-      </xsl:when>
-    </xsl:choose>
-  </xsl:template>
-
-  <xsl:template match="div[@class='crumbNav']"/>
-  <xsl:template match="div[contains(concat(' ', @class, ' '), ' nondisplayed ')]"/>
-  <xsl:template match="span[contains(concat(' ', @class, ' '), ' nondisplayed ')]"/>
 </xsl:stylesheet>
