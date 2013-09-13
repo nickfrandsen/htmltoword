@@ -26,6 +26,17 @@
   <xsl:template match="head" />
 
   <xsl:template match="body">
+    <xsl:comment>
+      KNOWN BUGS:
+      div
+        h2
+        div
+          textnode (WONT BE WRAPPED IN A W:P)
+          div
+            table
+            span
+              text
+    </xsl:comment>
     <w:body>
       <xsl:apply-templates/>
       <w:sectPr>
@@ -91,16 +102,18 @@
           h2
           span
             textnode
+            span
+              textnode
           p
 
-        The div template will not create a w:p because the div contains a h2. Therefore we need to wrap the span|a|small in a p here.
+        The div template will not create a w:p because the div contains a h2. Therefore we need to wrap the inline elements span|a|small in a p here.
       </xsl:comment>
     <w:p>
       <xsl:apply-templates />
     </w:p>
   </xsl:template>
 
-  <xsl:template match="text()[preceding-sibling::h1 or preceding-sibling::h2 or preceding-sibling::h3 or preceding-sibling::h4 or preceding-sibling::h5 or preceding-sibling::h6 or preceding-sibling::table or preceding-sibling::p or preceding-sibling::ol or preceding-sibling::ul or following-sibling::h1 or following-sibling::h2 or following-sibling::h3 or following-sibling::h4 or following-sibling::h5 or following-sibling::h6 or following-sibling::table or following-sibling::p or following-sibling::ol or following-sibling::ul]">
+  <xsl:template match="text()[preceding-sibling::h1 or preceding-sibling::h2 or preceding-sibling::h3 or preceding-sibling::h4 or preceding-sibling::h5 or preceding-sibling::h6 or preceding-sibling::table or preceding-sibling::p or preceding-sibling::ol or preceding-sibling::ul or preceding-sibling::div or following-sibling::h1 or following-sibling::h2 or following-sibling::h3 or following-sibling::h4 or following-sibling::h5 or following-sibling::h6 or following-sibling::table or following-sibling::p or following-sibling::ol or following-sibling::ul or following-sibling::div]">
     <xsl:comment>
         In the following situation:
 
