@@ -41,11 +41,14 @@ describe "XSLT" do
       result.at("//w:sectPr").remove
       result = result.at("//w:body/*")
     end
-    result.to_s.gsub(/\s+/, " ").should == resulting_wordml.gsub(/\s+/, " ")
+    remove_comments_and_whitespace(result.to_s).should == resulting_wordml.gsub(/\s+/, " ")
   end
 
   def compare_content_of_body?(wordml)
     wordml !~ /<?xml version/
   end
 
+  def remove_comments_and_whitespace(wordml)
+    wordml.gsub(/<!--([^*]|[\r\n])*-->/, "").gsub(/\s+/, " ")
+  end
 end
