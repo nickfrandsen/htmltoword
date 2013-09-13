@@ -1,0 +1,4 @@
+CHANGELOG
+
+Version 0.0.1: First basic implementation of htmltoword released.
+Version 0.0.2: Rewrote xslt to support tables and updated rubyzip to v1.
