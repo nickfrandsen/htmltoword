@@ -1,4 +1,11 @@
 CHANGELOG
 
-Version 0.0.1: First basic implementation of htmltoword released.
-Version 0.1.0: Rewrote xslt to support tables and updated rubyzip to v1.
+Version 0.1.1:
+* Nodes with neighbor nodes that create w:p's need to be wrapped in w:p themselves.
+* Fixed test suite.
+
+Version 0.1.0:
+* Rewrote xslt to support tables and updated rubyzip to v1.
+
+Version 0.0.1:
+* First basic implementation of htmltoword released.
