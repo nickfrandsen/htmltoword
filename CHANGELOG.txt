@@ -1,5 +1,8 @@
 CHANGELOG
 
+Version 0.1.2:
+* Bugfix: span.h (MS Word Highlights) with sibling block elements could result in invalid wordml.
+
 Version 0.1.1:
 * Nodes with neighbor nodes that create w:p's need to be wrapped in w:p themselves.
 * Fixed test suite.
