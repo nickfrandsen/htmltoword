@@ -21,7 +21,8 @@ Or install it yourself as:
 ```ruby
 require 'htmltoword'
 
-file = Htmltoword::Document.create params[:assembly_content_html], file_name
+my_html = '<html><head></head><body><p>Hello</p></body></html>'
+file = Htmltoword::Document.create my_html, file_name
 ```
 
 ### With Rails
@@ -39,6 +40,15 @@ def show
     end
   end
 end
+```
+
+```javascript
+  // OPTIONAL: Use a jquery click handler to store the markup in a hidden form field before the form is submitted.
+  // Using this strategy makes it easy to allow users to dynamically edit the document that will be turned
+  // into a docx file, for example by toggling sections of a document.
+  $('#download-as-docx').on('click', function () {
+    $('input[name="docx_html_source"]').val('<!DOCTYPE html>\n' + $('.delivery').html());
+  });
 ```
 
 ## Features
