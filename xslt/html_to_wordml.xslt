@@ -174,6 +174,8 @@
     <xsl:apply-templates />
   </xsl:template>
 
+  <xsl:template match="details" />
+
   <xsl:template match="table">
     <w:tbl>
       <w:tblPr>

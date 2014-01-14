@@ -1,5 +1,8 @@
 CHANGELOG
 
+Version 0.1.4:
+* Details tag doesnt really work well for printing. By default its closed and not visible until you click on the summary so for now lets ignore it in the print out.
+
 Version 0.1.3:
 * Bugfix: Leaf i and b nodes with w:p creating siblings need to create their own w:p's.
 

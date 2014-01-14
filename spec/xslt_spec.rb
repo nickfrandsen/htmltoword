@@ -9,26 +9,31 @@ describe "XSLT" do
 
   it "transforms a div into a docx block element." do
     html = '<html><head></head><body><div>Hello</div></body></html>'
-    compare_resulting_wordml_with_expected(html, "<w:p> <w:r> <w:t xml:space=\"preserve\">Hello</w:t> </w:r> </w:p>")
+    compare_resulting_wordml_with_expected(html, "<w:body> <w:p> <w:r> <w:t xml:space=\"preserve\">Hello</w:t> </w:r> </w:p> </w:body>")
   end
 
   context "transform a span" do
 
     it "into a docx block element if child of body." do
       html = '<html><head></head><body><span>Hello</span></body></html>'
-      compare_resulting_wordml_with_expected(html, "<w:p> <w:r> <w:t xml:space=\"preserve\">Hello</w:t> </w:r> </w:p>")
+      compare_resulting_wordml_with_expected(html, "<w:body> <w:p> <w:r> <w:t xml:space=\"preserve\">Hello</w:t> </w:r> </w:p> </w:body>")
     end
 
     it "into a docx inline element if not child of body." do
       html = '<html><head></head><body><div><span>Hello</span></div></body></html>'
-      compare_resulting_wordml_with_expected(html, "<w:p> <w:r> <w:t xml:space=\"preserve\">Hello</w:t> </w:r> </w:p>")
+      compare_resulting_wordml_with_expected(html, "<w:body> <w:p> <w:r> <w:t xml:space=\"preserve\">Hello</w:t> </w:r> </w:p> </w:body>")
     end
 
   end
 
   it "transforms a p into a docx block element." do
     html = '<html><head></head><body><p>Hello</p></body></html>'
-    compare_resulting_wordml_with_expected(html, "<w:p> <w:r> <w:t xml:space=\"preserve\">Hello</w:t> </w:r> </w:p>")
+    compare_resulting_wordml_with_expected(html, "<w:body> <w:p> <w:r> <w:t xml:space=\"preserve\">Hello</w:t> </w:r> </w:p> </w:body>")
+  end
+
+  it "Should strip out details tags" do
+    html = '<html><head></head><body><div><p>Hello</p><details><summary>Title</summary><p>Second</p><details></div></body></html>'
+    compare_resulting_wordml_with_expected(html, "<w:body> <w:p> <w:r> <w:t xml:space=\"preserve\">Hello</w:t> </w:r> </w:p> </w:body>")
   end
 
   protected
@@ -39,7 +44,7 @@ describe "XSLT" do
     result = xslt.transform(source)
     if compare_content_of_body?(resulting_wordml)
       result.at("//w:sectPr").remove
-      result = result.at("//w:body/*")
+      result = result.at("//w:body")
     end
     remove_comments_and_whitespace(result.to_s).should == resulting_wordml.gsub(/\s+/, " ")
   end
