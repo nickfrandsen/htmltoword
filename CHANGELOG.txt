@@ -1,5 +1,8 @@
 CHANGELOG
 
+Version 0.1.5:
+* Bugfix: h5 & h6 also create w:p's so any wrapping divs dont need to.
+
 Version 0.1.4:
 * Details tag doesnt really work well for printing. By default its closed and not visible until you click on the summary so for now lets ignore it in the print out.
 
