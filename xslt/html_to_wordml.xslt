@@ -215,14 +215,29 @@
     </w:tbl>
   </xsl:template>
 
-  <xsl:template match="tbody">
+  <xsl:template match="tbody|thead">
     <xsl:apply-templates />
   </xsl:template>
 
   <xsl:template match="tr">
-    <w:tr>
-      <xsl:apply-templates />
-    </w:tr>
+    <xsl:if test="string-length(.) > 0">
+      <w:tr>
+        <xsl:apply-templates />
+      </w:tr>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="th">
+    <w:tc>
+      <w:p>
+        <w:r>
+          <w:rPr>
+            <w:b />
+          </w:rPr>
+          <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
+        </w:r>
+      </w:p>
+    </w:tc>
   </xsl:template>
 
   <xsl:template match="td">
