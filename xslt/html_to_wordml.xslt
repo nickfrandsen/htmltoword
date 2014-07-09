@@ -176,19 +176,35 @@
 
   <xsl:template match="details" />
 
+  <xsl:template name="tableborders">
+    <xsl:variable name="border">
+      <xsl:choose>
+        <xsl:when test="not(@border)">0</xsl:when>
+        <xsl:otherwise><xsl:value-of select="./@border * 6"/></xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="bordertype">
+      <xsl:choose>
+        <xsl:when test="$border=0">none</xsl:when>
+        <xsl:otherwise>single</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <w:tblBorders>
+      <w:top w:val="{$bordertype}" w:sz="{$border}" w:space="0" w:color="auto"/>
+      <w:left w:val="{$bordertype}" w:sz="{$border}" w:space="0" w:color="auto"/>
+      <w:bottom w:val="{$bordertype}" w:sz="{$border}" w:space="0" w:color="auto"/>
+      <w:right w:val="{$bordertype}" w:sz="{$border}" w:space="0" w:color="auto"/>
+      <w:insideH w:val="{$bordertype}" w:sz="{$border}" w:space="0" w:color="auto"/>
+      <w:insideV w:val="{$bordertype}" w:sz="{$border}" w:space="0" w:color="auto"/>
+    </w:tblBorders>
+  </xsl:template>
+
   <xsl:template match="table">
     <w:tbl>
       <w:tblPr>
         <w:tblStyle w:val="TableGrid"/>
         <w:tblW w:w="0" w:type="auto"/>
-        <w:tblBorders>
-          <w:top w:val="none" w:sz="0" w:space="0" w:color="auto"/>
-          <w:left w:val="none" w:sz="0" w:space="0" w:color="auto"/>
-          <w:bottom w:val="none" w:sz="0" w:space="0" w:color="auto"/>
-          <w:right w:val="none" w:sz="0" w:space="0" w:color="auto"/>
-          <w:insideH w:val="none" w:sz="0" w:space="0" w:color="auto"/>
-          <w:insideV w:val="none" w:sz="0" w:space="0" w:color="auto"/>
-        </w:tblBorders>
+        <xsl:call-template name="tableborders"/>
         <w:tblLook w:val="0600" w:firstRow="0" w:lastRow="0" w:firstColumn="0" w:lastColumn="0" w:noHBand="1" w:noVBand="1"/>
       </w:tblPr>
       <w:tblGrid>
@@ -199,14 +215,29 @@
     </w:tbl>
   </xsl:template>
 
-  <xsl:template match="tbody">
+  <xsl:template match="tbody|thead">
     <xsl:apply-templates />
   </xsl:template>
 
   <xsl:template match="tr">
-    <w:tr>
-      <xsl:apply-templates />
-    </w:tr>
+    <xsl:if test="string-length(.) > 0">
+      <w:tr>
+        <xsl:apply-templates />
+      </w:tr>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="th">
+    <w:tc>
+      <w:p>
+        <w:r>
+          <w:rPr>
+            <w:b />
+          </w:rPr>
+          <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
+        </w:r>
+      </w:p>
+    </w:tc>
   </xsl:template>
 
   <xsl:template match="td">
