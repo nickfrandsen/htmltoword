@@ -63,11 +63,6 @@
     </w:p>
   </xsl:template>
 
-  <xsl:template match="td/div">
-    <w:p>
-      <xsl:apply-templates />
-    </w:p>
-  </xsl:template>
 
   <xsl:template match="div">
     <xsl:apply-templates />
@@ -248,9 +243,35 @@
 
   <xsl:template match="td">
     <w:tc>
-      <xsl:apply-templates />
-      <w:p></w:p>
+      <xsl:call-template name="block">
+        <xsl:with-param name="current" select="."/>
+      </xsl:call-template>
     </w:tc>
+  </xsl:template>
+
+  <xsl:template name="block">
+    <xsl:param name="current"/>
+    <xsl:for-each select="$current/*|$current/text()">
+      <xsl:choose>
+        <xsl:when test="table">
+          <xsl:apply-templates select="." />
+          <w:p></w:p>
+        </xsl:when>
+        <xsl:when test="p|h1|h2|h3|h4|h5|h6|ul|ol">
+          <xsl:apply-templates select="." />
+        </xsl:when>
+        <xsl:when test="descendant::table|descendant::p|descendant::h1|descendant::h2|descendant::h3|descendant::h4|descendant::h5|descendant::h6|descendant::li">
+          <xsl:call-template name="block">
+            <xsl:with-param name="current" select="."/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <w:p>
+            <xsl:apply-templates select="." />
+          </w:p>
+        </xsl:when>
+      </xsl:choose>
+    </xsl:for-each>
   </xsl:template>
 
   <xsl:template match="text()">
@@ -271,13 +292,6 @@
             </w:rPr>
             <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
           </w:r>
-        </xsl:when>
-        <xsl:when test="parent::td">
-          <w:p>
-            <w:r>
-              <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
-            </w:r>
-          </w:p>
         </xsl:when>
         <xsl:otherwise>
           <w:r>
