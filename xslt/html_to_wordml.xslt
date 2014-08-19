@@ -63,6 +63,12 @@
     </w:p>
   </xsl:template>
 
+  <xsl:template match="td/div">
+    <w:p>
+      <xsl:apply-templates />
+    </w:p>
+  </xsl:template>
+
   <xsl:template match="div">
     <xsl:apply-templates />
   </xsl:template>
@@ -242,11 +248,8 @@
 
   <xsl:template match="td">
     <w:tc>
-      <w:p>
-        <w:r>
-          <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
-        </w:r>
-      </w:p>
+      <xsl:apply-templates />
+      <w:p></w:p>
     </w:tc>
   </xsl:template>
 
@@ -268,6 +271,13 @@
             </w:rPr>
             <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
           </w:r>
+        </xsl:when>
+        <xsl:when test="parent::td">
+          <w:p>
+            <w:r>
+              <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
+            </w:r>
+          </w:p>
         </xsl:when>
         <xsl:otherwise>
           <w:r>
