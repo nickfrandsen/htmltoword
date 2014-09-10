@@ -50,11 +50,7 @@
 
   <xsl:template match="body/*[not(*)]">
     <w:p>
-      <xsl:if test="contains(concat(' ', @class, ' '), ' center ')">
-        <w:pPr>
-          <w:jc w:val="center"/>
-        </w:pPr>
-      </xsl:if>
+      <xsl:call-template name="text-alignment" />
       <w:r>
         <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
       </w:r>
@@ -64,6 +60,7 @@
   <xsl:template match="div[not(ancestor::p) and not(descendant::div) and not(descendant::p) and not(descendant::h1) and not(descendant::h2) and not(descendant::h3) and not(descendant::h4) and not(descendant::h5) and not(descendant::h6) and not(descendant::table) and not(descendant::li)]">
     <xsl:comment>Divs should create a p if nothing above them has and nothing below them will</xsl:comment>
     <w:p>
+      <xsl:call-template name="text-alignment" />
       <xsl:apply-templates />
     </w:p>
   </xsl:template>
@@ -85,11 +82,7 @@
 
   <xsl:template match="p">
     <w:p>
-      <xsl:if test="contains(concat(' ', @class, ' '), ' center ')">
-        <w:pPr>
-          <w:jc w:val="center"/>
-        </w:pPr>
-      </xsl:if>
+      <xsl:call-template name="text-alignment" />
       <xsl:apply-templates />
     </w:p>
   </xsl:template>
@@ -253,6 +246,7 @@
   <xsl:template match="td">
     <w:tc>
       <w:p>
+        <xsl:call-template name="text-alignment" />
         <w:r>
           <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
         </w:r>
@@ -288,9 +282,24 @@
     </xsl:if>
   </xsl:template>
 
-
   <xsl:template match="*">
     <xsl:apply-templates/>
   </xsl:template>
 
+  <xsl:template name="text-alignment">
+    <xsl:variable name="alignment">
+      <xsl:choose>
+        <xsl:when test="contains(concat(' ', @class, ' '), ' center ') or contains(translate(normalize-space(@style),' ',''), 'text-align:center')">center</xsl:when>
+        <xsl:when test="contains(concat(' ', @class, ' '), ' right ') or contains(translate(normalize-space(@style),' ',''), 'text-align:right')">right</xsl:when>
+        <xsl:when test="contains(concat(' ', @class, ' '), ' left ') or contains(translate(normalize-space(@style),' ',''), 'text-align:left')">left</xsl:when>
+        <xsl:when test="contains(concat(' ', @class, ' '), ' justify ') or contains(translate(normalize-space(@style),' ',''), 'text-align:justify')">both</xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:if test="string-length(normalize-space($alignment)) > 0">
+      <w:pPr>
+        <w:jc w:val="{$alignment}"/>
+      </w:pPr>
+    </xsl:if>
+  </xsl:template>
 </xsl:stylesheet>
