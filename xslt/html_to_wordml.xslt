@@ -50,6 +50,11 @@
 
   <xsl:template match="body/*[not(*)]">
     <w:p>
+      <xsl:if test="contains(concat(' ', @class, ' '), ' center ')">
+        <w:pPr>
+          <w:jc w:val="center"/>
+        </w:pPr>
+      </xsl:if>
       <w:r>
         <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
       </w:r>
@@ -80,6 +85,11 @@
 
   <xsl:template match="p">
     <w:p>
+      <xsl:if test="contains(concat(' ', @class, ' '), ' center ')">
+        <w:pPr>
+          <w:jc w:val="center"/>
+        </w:pPr>
+      </xsl:if>
       <xsl:apply-templates />
     </w:p>
   </xsl:template>

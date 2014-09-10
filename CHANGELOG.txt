@@ -1,5 +1,8 @@
 CHANGELOG
 
+Version 0.1.7
+* Allow centering of text within a paragraph if the paragraph has a 'center' class, e.g. <p class='center'>
+
 Version 0.1.6:
 * Add tables support for borders and headers
  
