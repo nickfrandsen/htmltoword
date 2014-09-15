@@ -182,6 +182,7 @@
   <xsl:template name="tableborders">
     <xsl:variable name="border">
       <xsl:choose>
+        <xsl:when test="contains(concat(' ', @class, ' '), ' table-bordered ')">6</xsl:when>
         <xsl:when test="not(@border)">0</xsl:when>
         <xsl:otherwise><xsl:value-of select="./@border * 6"/></xsl:otherwise>
       </xsl:choose>
