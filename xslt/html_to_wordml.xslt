@@ -219,8 +219,19 @@
     </w:tbl>
   </xsl:template>
 
-  <xsl:template match="tbody|thead">
+  <xsl:template match="tbody">
     <xsl:apply-templates />
+  </xsl:template>
+
+  <xsl:template match="thead">
+    <xsl:choose>
+      <xsl:when test="count(./tr) = 0">
+        <w:tr><xsl:apply-templates /></w:tr>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates />
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="tr">
