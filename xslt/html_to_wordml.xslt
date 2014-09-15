@@ -257,29 +257,19 @@
 
   <xsl:template match="text()">
     <xsl:if test="string-length(.) > 0">
-      <xsl:choose>
-        <xsl:when test="parent::i or parent::em">
-          <w:r>
-            <w:rPr>
-              <w:i />
-            </w:rPr>
-            <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
-          </w:r>
-        </xsl:when>
-        <xsl:when test="parent::b or parent::strong">
-          <w:r>
-            <w:rPr>
-              <w:b />
-            </w:rPr>
-            <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
-          </w:r>
-        </xsl:when>
-        <xsl:otherwise>
-          <w:r>
-            <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
-          </w:r>
-        </xsl:otherwise>
-      </xsl:choose>
+      <w:r>
+        <xsl:if test="ancestor::i or ancestor::em">
+          <w:rPr>
+            <w:i />
+          </w:rPr>
+        </xsl:if>
+        <xsl:if test="ancestor::b or ancestor::strong">
+          <w:rPr>
+            <w:b />
+          </w:rPr>
+        </xsl:if>
+        <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
+      </w:r>
     </xsl:if>
   </xsl:template>
 
