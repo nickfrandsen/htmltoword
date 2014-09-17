@@ -50,6 +50,7 @@
 
   <xsl:template match="body/*[not(*)]">
     <w:p>
+      <xsl:call-template name="text-alignment" />
       <w:r>
         <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
       </w:r>
@@ -59,6 +60,7 @@
   <xsl:template match="div[not(ancestor::p) and not(descendant::div) and not(descendant::p) and not(descendant::h1) and not(descendant::h2) and not(descendant::h3) and not(descendant::h4) and not(descendant::h5) and not(descendant::h6) and not(descendant::table) and not(descendant::li)]">
     <xsl:comment>Divs should create a p if nothing above them has and nothing below them will</xsl:comment>
     <w:p>
+      <xsl:call-template name="text-alignment" />
       <xsl:apply-templates />
     </w:p>
   </xsl:template>
@@ -81,6 +83,7 @@
 
   <xsl:template match="p">
     <w:p>
+      <xsl:call-template name="text-alignment" />
       <xsl:apply-templates />
     </w:p>
   </xsl:template>
@@ -180,6 +183,7 @@
   <xsl:template name="tableborders">
     <xsl:variable name="border">
       <xsl:choose>
+        <xsl:when test="contains(concat(' ', @class, ' '), ' table-bordered ')">6</xsl:when>
         <xsl:when test="not(@border)">0</xsl:when>
         <xsl:otherwise><xsl:value-of select="./@border * 6"/></xsl:otherwise>
       </xsl:choose>
@@ -216,8 +220,19 @@
     </w:tbl>
   </xsl:template>
 
-  <xsl:template match="tbody|thead">
+  <xsl:template match="tbody">
     <xsl:apply-templates />
+  </xsl:template>
+
+  <xsl:template match="thead">
+    <xsl:choose>
+      <xsl:when test="count(./tr) = 0">
+        <w:tr><xsl:apply-templates /></w:tr>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates />
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="tr">
@@ -279,35 +294,40 @@
 
   <xsl:template match="text()">
     <xsl:if test="string-length(.) > 0">
-      <xsl:choose>
-        <xsl:when test="parent::i or parent::em">
-          <w:r>
-            <w:rPr>
-              <w:i />
-            </w:rPr>
-            <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
-          </w:r>
-        </xsl:when>
-        <xsl:when test="parent::b or parent::strong">
-          <w:r>
-            <w:rPr>
-              <w:b />
-            </w:rPr>
-            <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
-          </w:r>
-        </xsl:when>
-        <xsl:otherwise>
-          <w:r>
-            <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
-          </w:r>
-        </xsl:otherwise>
-      </xsl:choose>
+      <w:r>
+        <xsl:if test="ancestor::i or ancestor::em">
+          <w:rPr>
+            <w:i />
+          </w:rPr>
+        </xsl:if>
+        <xsl:if test="ancestor::b or ancestor::strong">
+          <w:rPr>
+            <w:b />
+          </w:rPr>
+        </xsl:if>
+        <w:t xml:space="preserve"><xsl:value-of select="."/></w:t>
+      </w:r>
     </xsl:if>
   </xsl:template>
-
 
   <xsl:template match="*">
     <xsl:apply-templates/>
   </xsl:template>
 
+  <xsl:template name="text-alignment">
+    <xsl:variable name="alignment">
+      <xsl:choose>
+        <xsl:when test="contains(concat(' ', @class, ' '), ' center ') or contains(translate(normalize-space(@style),' ',''), 'text-align:center')">center</xsl:when>
+        <xsl:when test="contains(concat(' ', @class, ' '), ' right ') or contains(translate(normalize-space(@style),' ',''), 'text-align:right')">right</xsl:when>
+        <xsl:when test="contains(concat(' ', @class, ' '), ' left ') or contains(translate(normalize-space(@style),' ',''), 'text-align:left')">left</xsl:when>
+        <xsl:when test="contains(concat(' ', @class, ' '), ' justify ') or contains(translate(normalize-space(@style),' ',''), 'text-align:justify')">both</xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:if test="string-length(normalize-space($alignment)) > 0">
+      <w:pPr>
+        <w:jc w:val="{$alignment}"/>
+      </w:pPr>
+    </xsl:if>
+  </xsl:template>
 </xsl:stylesheet>
