@@ -57,14 +57,13 @@
     </w:p>
   </xsl:template>
 
-  <xsl:template match="div[not(ancestor::p) and not(descendant::div) and not(descendant::p) and not(descendant::h1) and not(descendant::h2) and not(descendant::h3) and not(descendant::h4) and not(descendant::h5) and not(descendant::h6) and not(descendant::table) and not(descendant::li)]">
+  <xsl:template match="div[not(ancestor::td) and not(ancestor::th) and not(ancestor::p) and not(descendant::div) and not(descendant::p) and not(descendant::h1) and not(descendant::h2) and not(descendant::h3) and not(descendant::h4) and not(descendant::h5) and not(descendant::h6) and not(descendant::table) and not(descendant::li)]">
     <xsl:comment>Divs should create a p if nothing above them has and nothing below them will</xsl:comment>
     <w:p>
       <xsl:call-template name="text-alignment" />
       <xsl:apply-templates />
     </w:p>
   </xsl:template>
-
 
   <xsl:template match="div">
     <xsl:apply-templates />
@@ -117,7 +116,7 @@
     </w:p>
   </xsl:template>
 
-  <xsl:template match="text()[preceding-sibling::h1 or preceding-sibling::h2 or preceding-sibling::h3 or preceding-sibling::h4 or preceding-sibling::h5 or preceding-sibling::h6 or preceding-sibling::table or preceding-sibling::p or preceding-sibling::ol or preceding-sibling::ul or preceding-sibling::div or following-sibling::h1 or following-sibling::h2 or following-sibling::h3 or following-sibling::h4 or following-sibling::h5 or following-sibling::h6 or following-sibling::table or following-sibling::p or following-sibling::ol or following-sibling::ul or following-sibling::div]">
+  <xsl:template match="text()[not(parent::td) and (preceding-sibling::h1 or preceding-sibling::h2 or preceding-sibling::h3 or preceding-sibling::h4 or preceding-sibling::h5 or preceding-sibling::h6 or preceding-sibling::table or preceding-sibling::p or preceding-sibling::ol or preceding-sibling::ul or preceding-sibling::div or following-sibling::h1 or following-sibling::h2 or following-sibling::h3 or following-sibling::h4 or following-sibling::h5 or following-sibling::h6 or following-sibling::table or following-sibling::p or following-sibling::ol or following-sibling::ul or following-sibling::div)]">
     <xsl:comment>
         In the following situation:
 
@@ -259,7 +258,7 @@
   <xsl:template match="td">
     <w:tc>
       <xsl:call-template name="block">
-        <xsl:with-param name="current" select="."/>
+        <xsl:with-param name="current" select="." />
         <xsl:with-param name="class" select="@class" />
         <xsl:with-param name="style" select="@style" />
       </xsl:call-template>
@@ -267,19 +266,19 @@
   </xsl:template>
 
   <xsl:template name="block">
-    <xsl:param name="current"/>
-    <xsl:param name="class"/>
-    <xsl:param name="style"/>
+    <xsl:param name="current" />
+    <xsl:param name="class" />
+    <xsl:param name="style" />
     <xsl:if test="count($current/*|$current/text()) = 0">
       <w:p/>
     </xsl:if>
     <xsl:for-each select="$current/*|$current/text()">
       <xsl:choose>
-        <xsl:when test="name(current()) = 'table'">
+        <xsl:when test="name(.) = 'table'">
           <xsl:apply-templates select="." />
-          <w:p></w:p>
+          <w:p/>
         </xsl:when>
-        <xsl:when test="p|h1|h2|h3|h4|h5|h6|ul|ol">
+        <xsl:when test="contains('|p|h1|h2|h3|h4|h5|h6|ul|ol|', concat('|', name(.), '|'))">
           <xsl:apply-templates select="." />
         </xsl:when>
         <xsl:when test="descendant::table|descendant::p|descendant::h1|descendant::h2|descendant::h3|descendant::h4|descendant::h5|descendant::h6|descendant::li">
