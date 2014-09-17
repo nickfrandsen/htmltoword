@@ -251,9 +251,12 @@
 
   <xsl:template name="block">
     <xsl:param name="current"/>
+    <xsl:if test="count($current/*|$current/text()) = 0">
+      <w:p/>
+    </xsl:if>
     <xsl:for-each select="$current/*|$current/text()">
       <xsl:choose>
-        <xsl:when test="table">
+        <xsl:when test="name(current()) = 'table'">
           <xsl:apply-templates select="." />
           <w:p></w:p>
         </xsl:when>
@@ -269,7 +272,7 @@
           <w:p>
             <xsl:apply-templates select="." />
           </w:p>
-        </xsl:when>
+        </xsl:otherwise>
       </xsl:choose>
     </xsl:for-each>
   </xsl:template>
