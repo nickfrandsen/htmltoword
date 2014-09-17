@@ -1,5 +1,16 @@
 CHANGELOG
 
+Version 0.1.8
+* Better alignment of text within a paragraph, div or table cell if it has a 'center', 'left', 'right', 'justify' class or by using the text-align property.
+* Support for table-bordered class on tables
+* Support for bold and italic text on table cells
+* Support for h1..h6 on table cells
+* Support for nested tables
+* Bugfix: thead without tr tag
+* Bugfix: nested bold and italic on paragraphs or div
+* Bugfix: allow <td><div>Some content <em>inside</em> a <strong>div</strong></div></td> syntax
+
+
 Version 0.1.7
 * Allow centering of text within a paragraph if the paragraph has a 'center' class, e.g. <p class='center'>
 
