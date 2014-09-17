@@ -86,7 +86,6 @@ describe "XSLT" do
             </w:t>
           </w:r>
         </w:p>
-        <w:p/>
       </w:tc>
     </w:tr>
   </w:tbl>
@@ -170,7 +169,6 @@ describe "XSLT" do
                   <w:t xml:space=\"preserve\">Nested</w:t>
                 </w:r>
               </w:p>
-              <w:p/>
             </w:tc>
             <w:tc>
               <w:p>
@@ -178,7 +176,6 @@ describe "XSLT" do
                   <w:t xml:space=\"preserve\">Table</w:t>
                 </w:r>
               </w:p>
-              <w:p/>
             </w:tc>
           </w:tr>
         </w:tbl>

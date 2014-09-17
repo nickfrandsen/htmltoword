@@ -260,12 +260,16 @@
     <w:tc>
       <xsl:call-template name="block">
         <xsl:with-param name="current" select="."/>
+        <xsl:with-param name="class" select="@class" />
+        <xsl:with-param name="style" select="@style" />
       </xsl:call-template>
     </w:tc>
   </xsl:template>
 
   <xsl:template name="block">
     <xsl:param name="current"/>
+    <xsl:param name="class"/>
+    <xsl:param name="style"/>
     <xsl:if test="count($current/*|$current/text()) = 0">
       <w:p/>
     </xsl:if>
@@ -285,6 +289,10 @@
         </xsl:when>
         <xsl:otherwise>
           <w:p>
+            <xsl:call-template name="text-alignment">
+              <xsl:with-param name="class" select="$class" />
+              <xsl:with-param name="style" select="$style" />
+            </xsl:call-template>
             <xsl:apply-templates select="." />
           </w:p>
         </xsl:otherwise>
@@ -315,12 +323,14 @@
   </xsl:template>
 
   <xsl:template name="text-alignment">
+    <xsl:param name="class" select="@class" />
+    <xsl:param name="style" select="@style" />
     <xsl:variable name="alignment">
       <xsl:choose>
-        <xsl:when test="contains(concat(' ', @class, ' '), ' center ') or contains(translate(normalize-space(@style),' ',''), 'text-align:center')">center</xsl:when>
-        <xsl:when test="contains(concat(' ', @class, ' '), ' right ') or contains(translate(normalize-space(@style),' ',''), 'text-align:right')">right</xsl:when>
-        <xsl:when test="contains(concat(' ', @class, ' '), ' left ') or contains(translate(normalize-space(@style),' ',''), 'text-align:left')">left</xsl:when>
-        <xsl:when test="contains(concat(' ', @class, ' '), ' justify ') or contains(translate(normalize-space(@style),' ',''), 'text-align:justify')">both</xsl:when>
+        <xsl:when test="contains(concat(' ', $class, ' '), ' center ') or contains(translate(normalize-space($style),' ',''), 'text-align:center')">center</xsl:when>
+        <xsl:when test="contains(concat(' ', $class, ' '), ' right ') or contains(translate(normalize-space($style),' ',''), 'text-align:right')">right</xsl:when>
+        <xsl:when test="contains(concat(' ', $class, ' '), ' left ') or contains(translate(normalize-space($style),' ',''), 'text-align:left')">left</xsl:when>
+        <xsl:when test="contains(concat(' ', $class, ' '), ' justify ') or contains(translate(normalize-space($style),' ',''), 'text-align:justify')">both</xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
