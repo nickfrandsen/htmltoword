@@ -69,7 +69,8 @@
     <xsl:apply-templates />
   </xsl:template>
 
-  <xsl:template match="h1|h2|h3|h4|h5|h6">
+  <!-- TODO: make this prettier. Headings shouldn't enter in template from L51 -->
+  <xsl:template match="body/h1|body/h2|body/h3|body/h4|body/h5|body/h6|h1|h2|h3|h4|h5|h6">
     <w:p>
       <w:r>
         <w:rPr>

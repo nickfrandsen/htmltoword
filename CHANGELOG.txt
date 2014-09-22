@@ -9,7 +9,7 @@ Version 0.1.8
 * Bugfix: thead without tr tag
 * Bugfix: nested bold and italic on paragraphs or div
 * Bugfix: allow <td><div>Some content <em>inside</em> a <strong>div</strong></div></td> syntax
-
+* Bugfix: Headings in body tag are now correctly parsed
 
 Version 0.1.7
 * Allow centering of text within a paragraph if the paragraph has a 'center' class, e.g. <p class='center'>
