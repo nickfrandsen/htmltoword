@@ -4,7 +4,7 @@ require 'htmltoword'
 
 def compare_resulting_wordml_with_expected(html, resulting_wordml)
   source = Nokogiri::HTML(html.gsub(/>\s+</, "><"))
-  xslt = Nokogiri::XSLT( File.read(Htmltoword::Document::XSLT_TEMPLATE))
+  xslt = Nokogiri::XSLT( File.read(Htmltoword::Document.default_xslt_template))
   result = xslt.transform(source)
   if compare_content_of_body?(resulting_wordml)
     result.at("//w:sectPr").remove

@@ -1,5 +1,11 @@
 CHANGELOG
 
+Version 0.2
+* Relocation of templates and xslt files
+* Enable gem configuration to set the location of default and custom word templates and xslt.
+* Allow the Htmltoword::Document.create to receive custom templates
+* Add .docx as a renderer when used with rails.
+
 Version 0.1.8
 * Better alignment of text within a paragraph, div or table cell if it has a 'center', 'left', 'right', 'justify' class or by using the text-align property.
 * Support for table-bordered class on tables

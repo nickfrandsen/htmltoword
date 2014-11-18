@@ -1,25 +1,34 @@
 module Htmltoword
   class Document
-
-    DOC_XML_FILE = "word/document.xml"
-    BASIC_PATH = ::Htmltoword.root
-    FILE_EXTENSION = ".docx"
-    XSLT_TEMPLATE = File.join(BASIC_PATH, 'xslt', 'html_to_wordml.xslt')
-
     class << self
       include HtmltowordHelper
 
-      def create content, file_name
-        word_file = new(template_file, file_name)
+      def create content, file_name, template_name=nil
+        file_name += extension unless file_name =~ /\.docx$/
+        template_name += extension if template_name && !(template_name =~ /\.docx$/)
+        word_file = new(template_file(template_name), file_name)
         word_file.replace_file content
         word_file.save
       end
 
       def create_with_content template, file_name, content, set=nil
-        word_file = new(template_file("#{template}#{FILE_EXTENSION}"), file_name)
+        template += extension unless template =~ /\.docx$/
+        word_file = new(template_file(template), file_name)
         content = replace_values(content, set) if set
         word_file.replace_file content
         word_file.save
+      end
+
+      def extension
+        '.docx'
+      end
+
+      def doc_xml_file
+        'word/document.xml'
+      end
+
+      def default_xslt_template
+        File.join(Htmltoword.config.default_xslt_path, 'html_to_wordml.xslt')
       end
     end
 
@@ -42,7 +51,7 @@ module Htmltoword
     #
     #
     def save
-      Tempfile.open([file_name, FILE_EXTENSION], type: 'application/zip') do |output_file|
+      Tempfile.open([file_name, Document.extension], type: 'application/zip') do |output_file|
         Zip::File.open(@template_path) do |template_zip|
           Zip::OutputStream.open(output_file.path) do |out|
             template_zip.each do |entry|
@@ -59,9 +68,9 @@ module Htmltoword
       end
     end
 
-    def replace_file html, file_name=DOC_XML_FILE
+    def replace_file html, file_name=Document.doc_xml_file
       source = Nokogiri::HTML(html.gsub(/>\s+</, "><"))
-      xslt = Nokogiri::XSLT( File.read(XSLT_TEMPLATE) )
+      xslt = Nokogiri::XSLT( File.read(Document.default_xslt_template) )
       source = xslt.transform( source ) unless (source/"/html").blank?
       @replaceable_files[file_name] = source.to_s
     end

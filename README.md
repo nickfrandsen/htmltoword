@@ -18,6 +18,7 @@ Or install it yourself as:
 
 ### Standalone
 
+Using the default word file as template
 ```ruby
 require 'htmltoword'
 
@@ -25,8 +26,53 @@ my_html = '<html><head></head><body><p>Hello</p></body></html>'
 file = Htmltoword::Document.create my_html, file_name
 ```
 
-### With Rails
+Using your custom word file as a template, where you can setup your own style for normal text, h1,h2, etc.
+```ruby
+require 'htmltoword'
 
+# Configure the location of your custom templates
+Htmltoword.config.custom_templates_path = 'some_path'
+
+my_html = '<html><head></head><body><p>Hello</p></body></html>'
+file = Htmltoword::Document.create my_html, file_name, word_template_file_name
+```
+
+### With Rails
+**For htmltoword version >= 0.2**
+An action controller renderer has been defined, so there's no need to declare the mime-type and you can just respond to .docx format. It will look then for views with the extension ```.docx.erb``` which will provide the HTML that will be rendered in the Word file.
+
+```ruby
+# On your controller.
+respond_to :docx
+
+# filename and word_template are optional. By default it will name the file as your action and use the default template provided by the gem. The use of the .docx in the filename and word_template is optional.
+def my_action
+  # ...
+  respond_with(@object, filename: 'my_file.docx', word_template: 'my_template.docx')
+end
+
+def my_action2
+  # ...
+  respond_to do |format|
+    format.docx do
+      render docx: 'my_view', filename: 'my_file.docx'
+    end
+  end
+end
+```
+
+Example of my_view.docx.erb
+```
+<h1> My custom template </h1>
+<%= render partial: 'my_partial', collection: @objects, as: :item %>
+```
+Example of _my_partial.docx.erb
+```
+<h3><%= item.title %></h3>
+<p> My html for item <%= item.id %> goes here </p>
+```
+
+**For htmltoword version <= 0.1.8**
 ```ruby
 # Add mime-type in /config/initializers/mime_types.rb:
 Mime::Type.register "application/vnd.openxmlformats-officedocument.wordprocessingml.document", :docx
@@ -49,6 +95,22 @@ end
   $('#download-as-docx').on('click', function () {
     $('input[name="docx_html_source"]').val('<!DOCTYPE html>\n' + $('.delivery').html());
   });
+```
+
+### Configure templates and xslt paths
+
+From version 2.0 you can configure the location of default and custom templates and xslt files. By default templates are defined under ```lib/htmltoword/templates``` and xslt under ```lib/htmltoword/xslt```
+
+```ruby
+Htmltoword.configure do |config|
+  config.custom_templates_path = 'path_for_custom_templates'
+  # If you modify this path, there should be a 'default.docx' file in there
+  config.default_templates_path = 'path_for_default_template'
+  # If you modify this path, there should be a 'html_to_wordml.xslt' file in there
+  config.default_xslt_path = 'some_path'
+  # The use of additional custom xslt will come soon
+  config.custom_xslt_path = 'some_path'
+end
 ```
 
 ## Features
