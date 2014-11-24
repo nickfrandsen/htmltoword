@@ -7,30 +7,7 @@ ActionController::Renderers.add :docx do |filename, options|
   unless formats.include?(:docx) || Rails.version < '3.2'
     formats[0] = :docx
   end
-  #
-  # The following code lets you call a separate view without
-  # specifying a template:
-  #
-  #  def called_action
-  #    render pdf: 'diff_action'
-  #    # or
-  #    render pdf: 'controller/diff_action'
-  #  end
-  #
-  # You can always specify a template:
-  #
-  #  def called_action
-  #    render pdf: 'filename', template: 'controller/diff_action'
-  #  end
-  #
-  # And the normal use case works:
-  #
-  #  def called_action
-  #    render 'diff_action'
-  #    # or
-  #    render 'controller/diff_action'
-  #  end
-  #
+
   if options[:template] == action_name
     if filename =~ /^([^\/]+)\/(.+)$/
       options[:prefixes] ||= []
@@ -51,8 +28,11 @@ ActionController::Renderers.add :docx do |filename, options|
 
   # other properties
   word_template = options.delete(:word_template) || nil
+  # content will come from property content unless not specified
+  # then it will look for a template.
+  content = options.delete(:content) || render_to_string(options)
 
-  doc = Htmltoword::Document.create render_to_string(options), file_name, word_template
+  doc = Htmltoword::Document.create content, file_name, word_template
   send_data File.read(doc.path), :filename => file_name, :type => Mime::DOCX, :disposition => disposition
 end
 
