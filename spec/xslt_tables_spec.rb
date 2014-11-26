@@ -559,10 +559,10 @@ Using table-bordered class
             </w:r>
           </w:p>
           <w:p>
+            <w:pPr>
+              <w:pStyle w:val="Heading1"/>
+            </w:pPr>
             <w:r>
-              <w:rPr>
-                <w:rStyle w:val="h1"/>
-              </w:rPr>
               <w:t xml:space="preserve">This is a H1</w:t>
             </w:r>
           </w:p>
