@@ -20,50 +20,50 @@ describe "XSLT for Headings" do
     expected_wordml = <<-EOL
   <w:body>
     <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading1"/>
+      </w:pPr>
       <w:r>
-        <w:rPr>
-          <w:rStyle w:val="h1"/>
-        </w:rPr>
         <w:t xml:space="preserve">Heading 1</w:t>
       </w:r>
     </w:p>
     <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading2"/>
+      </w:pPr>
       <w:r>
-        <w:rPr>
-          <w:rStyle w:val="h2"/>
-        </w:rPr>
         <w:t xml:space="preserve">Heading 2</w:t>
       </w:r>
     </w:p>
     <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading3"/>
+      </w:pPr>
       <w:r>
-        <w:rPr>
-          <w:rStyle w:val="h3"/>
-        </w:rPr>
         <w:t xml:space="preserve">Heading 3</w:t>
       </w:r>
     </w:p>
     <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading4"/>
+      </w:pPr>
       <w:r>
-        <w:rPr>
-          <w:rStyle w:val="h4"/>
-        </w:rPr>
         <w:t xml:space="preserve">Heading 4</w:t>
       </w:r>
     </w:p>
     <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading5"/>
+      </w:pPr>
       <w:r>
-        <w:rPr>
-          <w:rStyle w:val="h5"/>
-        </w:rPr>
         <w:t xml:space="preserve">Heading 5</w:t>
       </w:r>
     </w:p>
     <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading6"/>
+      </w:pPr>
       <w:r>
-        <w:rPr>
-          <w:rStyle w:val="h6"/>
-        </w:rPr>
         <w:t xml:space="preserve">Heading 6</w:t>
       </w:r>
     </w:p>
@@ -92,50 +92,50 @@ describe "XSLT for Headings" do
     expected_wordml = <<-EOL
   <w:body>
     <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading1"/>
+      </w:pPr>
       <w:r>
-        <w:rPr>
-          <w:rStyle w:val="h1"/>
-        </w:rPr>
         <w:t xml:space="preserve">Heading 1</w:t>
       </w:r>
     </w:p>
     <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading2"/>
+      </w:pPr>
       <w:r>
-        <w:rPr>
-          <w:rStyle w:val="h2"/>
-        </w:rPr>
         <w:t xml:space="preserve">Heading 2</w:t>
       </w:r>
     </w:p>
     <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading3"/>
+      </w:pPr>
       <w:r>
-        <w:rPr>
-          <w:rStyle w:val="h3"/>
-        </w:rPr>
         <w:t xml:space="preserve">Heading 3</w:t>
       </w:r>
     </w:p>
     <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading4"/>
+      </w:pPr>
       <w:r>
-        <w:rPr>
-          <w:rStyle w:val="h4"/>
-        </w:rPr>
         <w:t xml:space="preserve">Heading 4</w:t>
       </w:r>
     </w:p>
     <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading5"/>
+      </w:pPr>
       <w:r>
-        <w:rPr>
-          <w:rStyle w:val="h5"/>
-        </w:rPr>
         <w:t xml:space="preserve">Heading 5</w:t>
       </w:r>
     </w:p>
     <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading6"/>
+      </w:pPr>
       <w:r>
-        <w:rPr>
-          <w:rStyle w:val="h6"/>
-        </w:rPr>
         <w:t xml:space="preserve">Heading 6</w:t>
       </w:r>
     </w:p>
@@ -191,10 +191,10 @@ describe "XSLT for Headings" do
       <w:tr>
         <w:tc>
           <w:p>
+            <w:pPr>
+              <w:pStyle w:val="Heading1"/>
+            </w:pPr>
             <w:r>
-              <w:rPr>
-                <w:rStyle w:val="h1"/>
-              </w:rPr>
               <w:t xml:space="preserve">Heading 1</w:t>
             </w:r>
           </w:p>
@@ -206,10 +206,10 @@ describe "XSLT for Headings" do
         </w:tc>
         <w:tc>
           <w:p>
+            <w:pPr>
+              <w:pStyle w:val="Heading2"/>
+            </w:pPr>
             <w:r>
-              <w:rPr>
-                <w:rStyle w:val="h2"/>
-              </w:rPr>
               <w:t xml:space="preserve">Heading 2</w:t>
             </w:r>
           </w:p>
@@ -223,10 +223,10 @@ describe "XSLT for Headings" do
       <w:tr>
         <w:tc>
           <w:p>
+            <w:pPr>
+              <w:pStyle w:val="Heading3"/>
+            </w:pPr>
             <w:r>
-              <w:rPr>
-                <w:rStyle w:val="h3"/>
-              </w:rPr>
               <w:t xml:space="preserve">Heading 3</w:t>
             </w:r>
           </w:p>
@@ -238,10 +238,10 @@ describe "XSLT for Headings" do
         </w:tc>
         <w:tc>
           <w:p>
+            <w:pPr>
+              <w:pStyle w:val="Heading4"/>
+            </w:pPr>
             <w:r>
-              <w:rPr>
-                <w:rStyle w:val="h4"/>
-              </w:rPr>
               <w:t xml:space="preserve">Heading 4</w:t>
             </w:r>
           </w:p>
@@ -255,10 +255,10 @@ describe "XSLT for Headings" do
       <w:tr>
         <w:tc>
           <w:p>
+            <w:pPr>
+              <w:pStyle w:val="Heading5"/>
+            </w:pPr>
             <w:r>
-              <w:rPr>
-                <w:rStyle w:val="h5"/>
-              </w:rPr>
               <w:t xml:space="preserve">Heading 5</w:t>
             </w:r>
           </w:p>
@@ -270,10 +270,10 @@ describe "XSLT for Headings" do
         </w:tc>
         <w:tc>
           <w:p>
+            <w:pPr>
+              <w:pStyle w:val="Heading6"/>
+            </w:pPr>
             <w:r>
-              <w:rPr>
-                <w:rStyle w:val="h6"/>
-              </w:rPr>
               <w:t xml:space="preserve">Heading 6</w:t>
             </w:r>
           </w:p>
@@ -630,10 +630,10 @@ Using table-bordered class
             </w:r>
           </w:p>
           <w:p>
+            <w:pPr>
+              <w:pStyle w:val="Heading1"/>
+            </w:pPr>
             <w:r>
-              <w:rPr>
-                <w:rStyle w:val="h1"/>
-              </w:rPr>
               <w:t xml:space="preserve">This is a H1</w:t>
             </w:r>
           </w:p>
