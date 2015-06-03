@@ -1,5 +1,7 @@
 # Ruby Html to word Gem [![Code Climate](https://codeclimate.com/github/nickfrandsen/htmltoword.png)](https://codeclimate.com/github/nickfrandsen/htmltoword) [![Build Status](https://travis-ci.org/nickfrandsen/htmltoword.png)](https://travis-ci.org/nickfrandsen/htmltoword)
 
+## OBS: This repository is no longer being maintained. Please take a look at https://github.com/karnov/htmltoword
+
 This simple gem allows you to create MS Word docx documents from simple html documents. This makes it easy to create dynamic reports and forms that can be downloaded by your users as simple MS Word docx files.
 
 Add this line to your application's Gemfile:
@@ -81,7 +83,7 @@ Example of _my_partial.docx.erb
 # Add mime-type in /config/initializers/mime_types.rb:
 Mime::Type.register "application/vnd.openxmlformats-officedocument.wordprocessingml.document", :docx
 
-# Add docx reponder in your controler
+# Add docx responder in your controller
 def show
   respond_to do |format|
     format.docx do
